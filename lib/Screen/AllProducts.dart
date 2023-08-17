@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import '../color.dart';
 
 class AllProduct extends StatefulWidget {
-  const AllProduct({Key? key}) : super(key: key);
+  const AllProduct({Key? key, this.cantName, this.catId}) : super(key: key);
+  final String? catId ;
+  final String? cantName;
 
   @override
   State<AllProduct> createState() => _AllProductState();
@@ -45,18 +47,18 @@ class _AllProductState extends State<AllProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("All Product"),
+      appBar: AppBar(title: const Text("All Product"),
         backgroundColor: colors.primary,
         elevation: 0,
       ),
       body:Container(
-        margin: EdgeInsets.all(5),
+        margin: const EdgeInsets.all(5),
         width: MediaQuery.of(context).size.width,
         // height: MediaQuery.of(context).size.height / 2.8,
         child: ListView.builder(
             shrinkWrap: true,
             scrollDirection: Axis.vertical,
-            physics: PageScrollPhysics(),
+            physics: const PageScrollPhysics(),
             itemCount: listfurniture.length,
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
@@ -65,15 +67,7 @@ class _AllProductState extends State<AllProduct> {
                   product_name = listfurniture[index]['title'];
                   product_price = listfurniture[index]['price'];
                   product_loc = listfurniture[index]['address'];
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => FurnitureDescription(
-                  //           image: product_image,
-                  //           loc: product_loc,
-                  //           price: product_price,
-                  //           product_name: product_name,
-                  //         )));
+
                 },
                 child: Card(
                   elevation: 4,
@@ -83,7 +77,7 @@ class _AllProductState extends State<AllProduct> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Container(
+                        child: SizedBox(
                           width: MediaQuery.of(context).size.width*0.7,
                           height: MediaQuery.of(context).size.height*0.20,
                           child: Image.asset(
@@ -94,7 +88,7 @@ class _AllProductState extends State<AllProduct> {
                         alignment: Alignment.topRight,
                         child: Column(
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               height: 4,
                             ),
                             Padding(
@@ -102,19 +96,19 @@ class _AllProductState extends State<AllProduct> {
                               child: Text(
                                 listfurniture[index]['title'],
                                 textAlign: TextAlign.end,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 17),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 16,
                             ),
                             Row(
                               children: [
-                                SizedBox(width: 15,),
-                                Icon(
+                                const SizedBox(width: 15,),
+                                const Icon(
                                   Icons.currency_rupee_rounded,
                                   size: 15,
                                   color: Colors.black,

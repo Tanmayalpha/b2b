@@ -20,23 +20,31 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // _navigatetohome();
     getValidation();
   }
   Future getValidation()async{
     final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var obtainedOtp= sharedPreferences.getString('id');
+    String? obtainedOtp = sharedPreferences.getString('id');
 
       finalOtp = obtainedOtp;
-    _navigatetohome();
+    _navigateToHome();
 
   }
 
-  _navigatetohome() async{
-    await Future.delayed(const Duration(seconds: 2),(){});
+  _navigateToHome() {
+    Future.delayed(const Duration(milliseconds:  0),() {
+      if (finalOtp == null || finalOtp ==  ''){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const LoginPage()));
+      }else {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const B2BHome()));
+
+      }
+    },);
+
+
+  }
   // Get.to(finalOtp==null?LoginPage():DetailPage());
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> finalOtp==null ? LoginPage(): B2BHome()));
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +52,7 @@ class _SplashScreenState extends State<SplashScreen> {
       child: Scaffold(
         body: Stack(
           children:[
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child:
@@ -52,15 +60,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
               ),
       ),
-            Container(
-              child: Center(
-              child: Text(''
-                  'B2BDIARY',
-              style: TextStyle(color: Colors.white,fontSize: 28,
-              ),
-              ),
-          ),
+            const Center(
+            child: Text(''
+                'B2BDIARY',
+            style: TextStyle(color: Colors.white,fontSize: 28,
             ),
+            ),
+          ),
       ],
         ),
       ),

@@ -1072,17 +1072,18 @@ class _DetailPageState extends State<DetailPage> {
       print(store['message']);
       if (store['error'] == false) {
 
-       var userName = store['user_data']['username'];
-       var email = store['user_data']['email'];
-        var mobile= store['user_data']['mobile'];
-        var sessionId =store['user_id'];
+    //   var userName = store['user_data']['username'];
+    //   var email = store['user_data']['email'];
+     //   var mobile= store['user_data']['mobile'];
+      //  var sessionId =store['user_id'];
          userId = store['data']['id'];
 
         if(isFrom){
-          await Future.delayed(const Duration(seconds: 2));
+          await Future.delayed(const Duration(seconds: 1));
+
           if (context.mounted) Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductFormScreen()));
         }else {
-          await Future.delayed(const Duration(seconds: 2));
+          await Future.delayed(const Duration(seconds: 1));
 
           if (context.mounted) Navigator.push(context, MaterialPageRoute(builder: (context) => const B2BHome()));
         }

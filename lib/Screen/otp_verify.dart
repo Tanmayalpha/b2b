@@ -2,6 +2,7 @@
 // import 'package:b2b/sixth.dart';
 import 'dart:convert';
 import 'package:b2b/Constant/Constants.dart';
+import 'package:b2b/Model/login_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -20,29 +21,29 @@ String? otp;
 String? mobileNumber;
 
 String? controller;
-var userName;
-var email;
-var mobile;
-var sessionId;
-var companyName;
-var bussinessAddress;
-var gstNumber;
-var udyogNumber;
-var bussinessCategory;
-var country;
-var state;
-var district;
-var area;
-var pinCode;
-var city;
-var partnerName;
-var partnerNumber;
-var googleAddress;
-var anyNumber;
-var websiteLink;
-var facebook;
-var insta;
-var linkdin;
+String? userName;
+String? email;
+String? mobile;
+String? sessionId;
+String? companyName;
+String? bussinessAddress;
+String? gstNumber;
+String? udyogNumber;
+String? bussinessCategory;
+String? country;
+String? state;
+String? district;
+String? area;
+String? pinCode;
+String? city;
+String? partnerName;
+String? partnerNumber;
+String? googleAddress;
+String? anyNumber;
+String? websiteLink;
+String? facebook;
+String? insta;
+String? linkdin;
 
 
 var username2;
@@ -100,7 +101,7 @@ class _OtpVerifyState extends State<OtpVerify> {
                     MaterialPageRoute(builder: (context) => LoginPage()));
               },
             ),
-            title: Text(
+            title: const Text(
               "Verification",
               style: TextStyle(fontSize: 20, letterSpacing: 1.0),
             ),
@@ -111,8 +112,8 @@ class _OtpVerifyState extends State<OtpVerify> {
             padding: const EdgeInsets.only(top: 78.0),
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
+                const Padding(
+                  padding: EdgeInsets.all(20.0),
                   child: Text(
                     "Code has sent to",
                     style: TextStyle(
@@ -145,11 +146,11 @@ class _OtpVerifyState extends State<OtpVerify> {
             },
             //runs when every textfield is filled
             onSubmit: (String verificationCode) {
-             controller=verificationCode;
+             controller = verificationCode;
             },),
 
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, bottom: 5),
+                const Padding(
+                  padding: EdgeInsets.only(top: 20, bottom: 5),
                   child: Text(
                     "Haven't received the verification code?",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
@@ -159,7 +160,7 @@ class _OtpVerifyState extends State<OtpVerify> {
                   onTap: (){
                     postData(context);
                   },
-                  child: Text("Resend",
+                  child: const Text("Resend",
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
                 ),
                 Padding(
@@ -174,16 +175,13 @@ class _OtpVerifyState extends State<OtpVerify> {
                   //   },
                     child: InkWell(
                       onTap: () async{
-                        print(controller);
                         verifyData();
-                        getProfile();
-                       mobileNumber=mobile;
+
+                       //mobileNumber = mobile;
                        //  final SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
                        // sharedPreferences.setString('otp1', pinCodeController.text);
                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>B2BHome()));
-                        print(controller);
                         // print("$mobileController.text");
-                        print(mobile);
 
                       },
                       child: Container(
@@ -238,7 +236,6 @@ class _OtpVerifyState extends State<OtpVerify> {
       });
     }
     if(profileStore2['error']==false){
-    print("${profileStore2['data']['username']}=-=-=-=-=-=----=");
     }
     else {
     print(response.reasonPhrase);
@@ -246,6 +243,7 @@ class _OtpVerifyState extends State<OtpVerify> {
 
   }
 
+  LoginSuccessResponse? _loginSuccessResponse ;
   verifyData() async {
     var headers = {
       'Cookie': 'ci_session=228544e29bd38db4392fc21e8bf90e7adb898615'
@@ -256,7 +254,7 @@ class _OtpVerifyState extends State<OtpVerify> {
             'https://developmentalphawizz.com/B2B/seller/app/v1/api/verify_user'));
     request.fields.addAll({
       'mobile': '${widget.mobileNo}',
-      'otp': '${controller}',
+      'otp': controller ?? '',
       // '${pinCodeController.text}',
     });
 
@@ -264,74 +262,77 @@ class _OtpVerifyState extends State<OtpVerify> {
 
     http.StreamedResponse response = await request.send();
 
+    print('___________${request.fields}__________');
+
+
+
     if (response.statusCode == 200) {
       var result = await response.stream.bytesToString();
+      print('___________${result}__________');
+
       var store = jsonDecode(result);
       setState(() {
         store2 = store;
         // print("${store2}");
       });
       if (store['error'] == false) {
-        // print("${store}===================================================================");
-        userName = store['data']['username'];
-        email=store['data']['email'];
-        mobile=store['data']['mobile'];
-        sessionId =store['data']['id'];
-        userId = store['data']['id'];
+
+
+        _loginSuccessResponse =  LoginSuccessResponse.fromJson(store);
+        userName = _loginSuccessResponse?.data?.username ?? '';
+        email = _loginSuccessResponse?.data?.email ?? '';
+        mobile=_loginSuccessResponse?.data?.mobile ?? '';
+        sessionId =_loginSuccessResponse?.data?.id ?? '';
+        userId = _loginSuccessResponse?.data?.id ?? '';
          ////////////////////////// companyName=store['data']['id'];
-        bussinessAddress=store['data']['company_address'];
-        gstNumber=store['data']['tax_number'];
-        udyogNumber=store['data']['udyog_num'];
-        bussinessCategory=store['data']['type_of_seller'];
-        country=store['data']['country'];
-        state=store['data']['state'];
-        district=store['data']['destrict'];
-        area=store['data']['area'];
-        pinCode=store['data']['pincode'];
-        city=store['data']['city'];
-        partnerName=store['data']['partner'];
-        partnerNumber=store['data']['partner_number'];
-        googleAddress=store['data']['address'];
+        bussinessAddress= _loginSuccessResponse?.data?.address ?? '';
+        gstNumber = _loginSuccessResponse?.sellerData?.taxNumber ?? '';
+        udyogNumber= _loginSuccessResponse?.sellerData?.udyogNum ?? '';
+        bussinessCategory =_loginSuccessResponse?.data?.typeOfSeller ?? '';
+        country=  _loginSuccessResponse?.data?.country ?? '';
+        state=_loginSuccessResponse?.data?.state ?? '';
+        district=_loginSuccessResponse?.data?.destrict ?? '';
+        area=_loginSuccessResponse?.data?.area ?? '';
+        pinCode=_loginSuccessResponse?.data?.pincode ?? '';
+        city=_loginSuccessResponse?.data?.city ?? '';
+        partnerName=_loginSuccessResponse?.sellerData?.partner ?? '';
+        partnerNumber=_loginSuccessResponse?.sellerData?.panNumber ?? '';
+        googleAddress=_loginSuccessResponse?.sellerData?.partnerAddress ?? '';
        //////////////// anyNumber=store['data']['id'];
        //////////////// websiteLink=store['data']['id'];
-        facebook=store['data']['facebook'];
-        insta=store['data']['instagram'];
-        linkdin=store['data']['linkedin'];
+        facebook=_loginSuccessResponse?.sellerData?.facebook ?? '';
+        insta=_loginSuccessResponse?.sellerData?.instagram ?? '';
+        linkdin=_loginSuccessResponse?.sellerData?.linkedin ?? '';
 
 
-        print(userName);
-        print(insta);
-        print(linkdin);
-        print(bussinessAddress);
-        print(udyogNumber);
 
-        store2==null? CircularProgressIndicator():
+
+         final SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
+        sharedPreferences.setString('id', sessionId ?? '');
+        sharedPreferences.setString('username', userName ?? '');
+        sharedPreferences.setString('email', email ?? '');
+        sharedPreferences.setString('mobile', mobile ?? '');
+
+        sharedPreferences.setString('gstNumber', gstNumber ?? '');
+        sharedPreferences.setString('udyogNumber', udyogNumber ?? '');
+        sharedPreferences.setString('bussinessCategory', bussinessCategory ?? '');
+        sharedPreferences.setString('country', country ?? '');
+        sharedPreferences.setString('state', state ?? '');
+        sharedPreferences.setString('district', district ?? '');
+        sharedPreferences.setString('area', area ?? '');
+        sharedPreferences.setString('pinCode', pinCode ??'');
+        sharedPreferences.setString('city', city ?? '');
+        sharedPreferences.setString('partnerName', partnerName ?? '');
+        sharedPreferences.setString('partnerNumber', partnerNumber ?? '');
+        sharedPreferences.setString('googleAddress', googleAddress ?? '');
+        sharedPreferences.setString('facebook', facebook ?? '');
+        sharedPreferences.setString('insta', insta ?? '');
+        sharedPreferences.setString('linkdin', linkdin ?? '');
+
         Navigator.push(context, MaterialPageRoute(builder: (context)=>B2BHome()));
 
-         final SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
-        sharedPreferences.setString('id', sessionId);
-        sharedPreferences.setString('username', userName);
-        sharedPreferences.setString('email', email);
-        sharedPreferences.setString('mobile', mobile);
 
-           // sharedPreferences.setString('bussinessAddress', bussinessAddress);
-        sharedPreferences.setString('gstNumber', gstNumber);
-        sharedPreferences.setString('udyogNumber', udyogNumber);
-        sharedPreferences.setString('bussinessCategory', bussinessCategory);
-        sharedPreferences.setString('country', country);
-        sharedPreferences.setString('state', state);
-        sharedPreferences.setString('district', district);
-        sharedPreferences.setString('area', area);
-        sharedPreferences.setString('pinCode', pinCode);
-        sharedPreferences.setString('city', city);
-        sharedPreferences.setString('partnerName', partnerName);
-        sharedPreferences.setString('partnerNumber', partnerNumber);
-        sharedPreferences.setString('googleAddress', googleAddress);
-        sharedPreferences.setString('facebook', facebook);
-        sharedPreferences.setString('insta', insta);
-        sharedPreferences.setString('linkdin', linkdin);
-
-      //  Navigator.push(context, MaterialPageRoute(builder: (context)=>B2BHome()));
+        //  Navigator.push(context, MaterialPageRoute(builder: (context)=>B2BHome()));
       }
     } else {
       print(response.reasonPhrase);

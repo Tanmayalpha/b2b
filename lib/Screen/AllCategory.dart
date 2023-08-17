@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 // import 'package:anoop/Model/GetHomeCategoryModel.dart';
+import 'package:b2b/widgets/categoryCard.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart'as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,41 +29,21 @@ class _HomeFullCategoryState extends State<HomeFullCategory> {
 
     return Scaffold(
       appBar: AppBar(centerTitle: true,
-          title: Text("All Category"), backgroundColor: colors.primary),
-      body: SingleChildScrollView(
-        child: Container(
+          title: const Text("All Category"), backgroundColor: colors.primary),
+      body: homeCategory?.data == null ? const Center(child: CircularProgressIndicator(color: colors.primary,),) : SingleChildScrollView(
+        child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: GridView.builder(
               scrollDirection: Axis.vertical,
-              physics: AlwaysScrollableScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(),
               itemCount: homeCategory?.data?.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 2,
                 mainAxisSpacing: 2,
               ),
               itemBuilder: (context, index) {
-                return Card(margin: EdgeInsets.all(4),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(3)
-                  ),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height*0.5,
-                    child: Column(
-                      children: [homeCategory?.data?[index].image==null?CircularProgressIndicator():
-                        Image.network("${homeCategory?.data?[index].image}",
-                          height:MediaQuery.of(context).size.height /13,
-                          width: 100,
-                        ),
-                        SizedBox(height:5 ,),
-                        Text("${homeCategory?.data?[index].name}",style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 8,
-                        ),),
-                      ],
-                    ),
-                  ),
-                );
+                return categoryCard(context,homeCategory?.data?[index].image ?? '', homeCategory?.data?[index].name ?? '' );
               }),
 
         ),
