@@ -143,6 +143,7 @@ class _B2BHomeState extends State<B2BHome> {
 
   @override
   void initState() {
+    print("shivaniiiiiii");
     super.initState();
     sliderImages();
     _getAddressFromLatLng();
